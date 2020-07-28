@@ -1,29 +1,41 @@
+#include "process.h"
+
 #include <unistd.h>
+
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include "process.h"
+#include "linux_parser.h"
 
 using std::string;
 using std::to_string;
 using std::vector;
 
+// Process Constructor
+Process::Process(const int& pid) : pid_(pid) {
+  // Retrive User Name
+  user_ = LinuxParser::User(pid_);
+
+  // Retrieve Command Name
+  command_ = LinuxParser::Command(pid_);
+}
+
 // TODO: Return this process's ID
-int Process::Pid() { return 0; }
+int Process::Pid() { return (pid_); }
 
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() { return 0; }
 
 // TODO: Return the command that generated this process
-string Process::Command() { return string(); }
+string Process::Command() { return command_; }
 
 // TODO: Return this process's memory utilization
 string Process::Ram() { return string(); }
 
 // TODO: Return the user (name) that generated this process
-string Process::User() { return string(); }
+string Process::User() { return user_; }
 
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { return 0; }
