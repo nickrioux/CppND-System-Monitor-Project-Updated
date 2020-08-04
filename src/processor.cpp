@@ -3,7 +3,14 @@
 
 // TODO: Return the aggregate CPU utilization
 float Processor::Utilization() {
-  std::string cpuUsageString = LinuxParser::CpuUtilization().back();
-  float cpuUsage = std::stof(cpuUsageString);
+  long currActiveJiffies = LinuxParser::ActiveJiffies();
+  long currIdleJiffies = LinuxParser::IdleJiffies();
+
+
+  float cpuUsage = ((currActiveJiffies - prevActiveJiffies)/(float)(currIdleJiffies-prevIdleJiffies));
+
+  prevActiveJiffies = currActiveJiffies;
+  prevIdleJiffies = currIdleJiffies;
+
   return cpuUsage;
 }

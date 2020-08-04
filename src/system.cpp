@@ -19,18 +19,40 @@ using std::vector;
 System::System() {
   // Initialize cpu_ TODO - Later create the right number of processors
 }
+
+bool sortDescend(const Process & a, const Process & b) { return !(a<b); }
+void System::Update() {
+    
+    static int counter = 0;
+
+    //Update System Info
+
+    //Update Processes
+    std::vector<int> pids{};
+    std::vector<Process> processes{};
+
+    pids = LinuxParser::Pids();
+
+    if (pids.size() > 0) {
+      for (int i = 0; i < (int)pids.size(); ++i) {
+          processes.push_back(Process(pids[i]));
+          processes.back().Update();
+      }
+    }
+
+    //Sort Process
+    std::sort(processes.begin(), processes.end(),sortDescend);
+
+    processes_ = processes;
+
+    counter++;
+}
+
 // TODO: Return the system's CPU
 Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
-  std::vector<int> pids;
-
-  pids = LinuxParser::Pids();
-
-  for (int i = 0; i <= (int)pids.size(); ++i) {
-    processes_.push_back(Process(pids[i]));
-  }
   return processes_;
 }
 
