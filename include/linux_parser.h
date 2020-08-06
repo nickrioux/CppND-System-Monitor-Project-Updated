@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <regex>
+#include <set>
 #include <string>
 
 namespace LinuxParser {
@@ -21,7 +22,7 @@ const std::string kPasswordPath{"/etc/passwd"};
 // System
 float MemoryUtilization();
 long UpTime();
-std::vector<int> Pids();
+std::set<int> Pids();
 int TotalProcesses();
 int RunningProcesses();
 std::string OperatingSystem();
@@ -46,11 +47,10 @@ long ActiveJiffies();
 long ActiveJiffies(int pid);
 long IdleJiffies();
 
-
 // Processes
 enum CPUTimesIndex {
   kUtimeIdx = 14,
-  kStimeIdx = 15, 
+  kStimeIdx = 15,
   kCutimeIdx = 16,
   kCstimeIdx = 17,
   kStarttimeIdx = 22
