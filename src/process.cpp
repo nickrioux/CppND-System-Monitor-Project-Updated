@@ -7,8 +7,6 @@
 #include <string>
 #include <vector>
 
-#include "linux_parser.h"
-
 using std::string;
 using std::to_string;
 using std::vector;
@@ -35,7 +33,7 @@ void Process::ComputeCpuUtilization(long activeJiffies, long systemJiffies) {
   long processTime = activeJiffies;
 
   cpuUsage_ =
-      (processTime - prev_ProcessTime) / (float)(totalTime - prev_TotalTime);
+      (processTime - prev_ProcessTime) / (double)(totalTime - prev_TotalTime);
 
   prev_TotalTime = totalTime;
   prev_ProcessTime = processTime;

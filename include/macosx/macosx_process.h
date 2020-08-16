@@ -1,15 +1,17 @@
-#ifndef LINUX_PROCESS_H
-#define LINUX_PROCESS_H
+#ifndef MACOSX_PROCESS_H
+#define MACOSX_PROCESS_H
 
 #include <string>
+
 #include "process.h"
 /*
 Basic class for Process representation
 It contains relevant attributes as shown below
 */
-class Linux_Process : public Process {
+class MacOSX_Process : public Process {
  public:
-  Linux_Process(const int& pid);
+  MacOSX_Process(const int& pid);
+  ~MacOSX_Process() {};
   std::string Ram();  // TODO: See src/process.cpp
   long int UpTime();  // TODO: See src/process.cpp
 

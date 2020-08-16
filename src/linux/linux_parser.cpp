@@ -2,19 +2,18 @@
 
 #include <dirent.h>
 #include <unistd.h>
+
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include <unistd.h>
-
 using std::stof;
 using std::string;
+using std::stringstream;
 using std::to_string;
 using std::vector;
-using std::stringstream;
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
@@ -118,8 +117,8 @@ long LinuxParser::UpTime() {
 }
 
 // Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { 
-  //return ActiveJiffies() + IdleJiffies(); 
+long LinuxParser::Jiffies() {
+  // return ActiveJiffies() + IdleJiffies();
   return UpTime() * sysconf(_SC_CLK_TCK);
 }
 
@@ -318,15 +317,15 @@ long LinuxParser::UpTime(int pid) {
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
 
   if (filestream.is_open()) {
-      std::getline(filestream, line);
-      std::istringstream streamLine(line);
-      for (int i = 0; i < 22; ++i) {
-        streamLine >> sValue;
-      }
+    std::getline(filestream, line);
+    std::istringstream streamLine(line);
+    for (int i = 0; i < 22; ++i) {
+      streamLine >> sValue;
+    }
 
-      value = LinuxParser::UpTime() - std::stol(sValue)/sysconf(_SC_CLK_TCK);
+    value = LinuxParser::UpTime() - std::stol(sValue) / sysconf(_SC_CLK_TCK);
   }
-  
+
   return value;
 }
 

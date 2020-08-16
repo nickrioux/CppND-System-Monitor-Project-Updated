@@ -1,4 +1,7 @@
+#include "linux_system.h"
+
 #include <unistd.h>
+
 #include <cstddef>
 #include <iostream>
 #include <set>
@@ -6,9 +9,8 @@
 #include <vector>
 
 #include "linux_parser.h"
-#include "linux_processor.h"
-#include "linux_system.h"
 #include "linux_process.h"
+#include "linux_processor.h"
 #include "process.h"
 #include "processor.h"
 #include "system.h"
@@ -18,13 +20,15 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-Linux_System::Linux_System() : System(linux_cpu_) {};
+Linux_System::Linux_System() : System(linux_cpu_){};
 
-//Sort Process Comparison Function
-bool Linux_System::wayToSort(shared_ptr<Process> p1, shared_ptr<Process> p2) { return *p1 > *p2; }
+// Sort Process Comparison Function
+bool Linux_System::wayToSort(shared_ptr<Process> p1, shared_ptr<Process> p2) {
+  return *p1 > *p2;
+}
 
 // TODO: Return a container composed of the system's processes
-vector< shared_ptr<Process> > & Linux_System::Processes() {
+vector<shared_ptr<Process> >& Linux_System::Processes() {
   // Update Processes
   std::set<int> pids{};
 
@@ -52,13 +56,14 @@ vector< shared_ptr<Process> > & Linux_System::Processes() {
     } else {
       (*i)->SetActive(true);
       (*i)->ComputeCpuUtilization(LinuxParser::ActiveJiffies((*i)->Pid()),
-                                 LinuxParser::Jiffies());
+                                  LinuxParser::Jiffies());
     }
   }
 
   GetProcesses().erase(
-      std::remove_if(GetProcesses().begin(), GetProcesses().end(),
-                     [](const shared_ptr<Process> p) { return p->Active() == false; }),
+      std::remove_if(
+          GetProcesses().begin(), GetProcesses().end(),
+          [](const shared_ptr<Process> p) { return p->Active() == false; }),
       GetProcesses().end());
 
   // Sort Process

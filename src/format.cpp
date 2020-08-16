@@ -1,8 +1,8 @@
+#include "format.h"
+
 #include <iomanip>
 #include <sstream>
 #include <string>
-
-#include "format.h"
 
 using std::string;
 
@@ -14,8 +14,8 @@ string Format::ElapsedTime(long seconds) {
   int sec, min, hours = 0;
 
   hours = seconds / (3600);
-  min = (seconds % 3600) / 60;
-  sec = (seconds % 3600) % 60;
+  min = (seconds / 60) % 60;
+  sec = (seconds % 60);
 
   std::stringstream stream;
 
