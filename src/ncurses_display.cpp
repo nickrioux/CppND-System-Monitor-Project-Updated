@@ -13,6 +13,14 @@
 using std::string;
 using std::to_string;
 
+#if defined(__linux) || defined(__linux__) || defined(linux)
+#define LINUX
+#elif defined(__APPLE__)
+#define MACOS
+#elif defined(_WIN32) || defined(__WIN32__) || defined(WIN32) || defined(_WIN64)
+#define WINDOWS
+#endif
+
 // 50 bars uniformly displayed from 0 - 100 %
 // 2% is one bar(|)
 std::string NCursesDisplay::ProgressBar(float percent) {
@@ -59,10 +67,19 @@ void NCursesDisplay::DisplayProcesses(
   int row{0};
   int const pid_column{2};
   int const user_column{9};
+
+#if defined(MACOS)
   int const cpu_column{29};
   int const ram_column{39};
   int const time_column{46};
   int const command_column{56};
+#elif defined(LINUX)
+  int const cpu_column{16};
+  int const ram_column{26};
+  int const time_column{35};
+  int const command_column{46};
+#endif
+
   wattron(window, COLOR_PAIR(2));
   mvwprintw(window, ++row, pid_column, "PID");
   mvwprintw(window, row, user_column, "USER");
@@ -81,7 +98,7 @@ void NCursesDisplay::DisplayProcesses(
     mvwprintw(window, row, time_column,
               Format::ElapsedTime(processes[i]->UpTime()).c_str());
     mvwprintw(window, row, command_column,
-              processes[i]->Command().substr(0, window->_maxx - 46).c_str());
+              processes[i]->Command().substr(0, window->_maxx - command_column).c_str());
   }
 }
 
