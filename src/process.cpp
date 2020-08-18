@@ -33,23 +33,20 @@ void Process::ComputeCpuUtilization(long activeJiffies, long systemJiffies) {
   long processTime = activeJiffies;
 
   cpuUsage_ =
-      (processTime - prev_ProcessTime) / (double)(totalTime - prev_TotalTime);
+      (processTime - getPrevProcessTime()) / (double)(totalTime - getPrevTotalTime());
 
-  prev_TotalTime = totalTime;
-  prev_ProcessTime = processTime;
+  setPrevTotalTime(totalTime);
+  setPrevProcessTime(processTime);
 }
 
 // TODO: Return the command that generated this process
-string Process::Command() { return command_; }
-
-// TODO: Return this process's memory utilization
-string Process::Ram() { return (string("")); }
+string Process::Command() const { return command_; }
 
 // TODO: Return the user (name) that generated this process
-string Process::User() { return user_; }
+string Process::User() const { return user_; }
 
-// TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return 0; }
+std::string Process::Ram() const { return ""; }
+long Process::UpTime() const { return 0; }
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function

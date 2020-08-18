@@ -20,8 +20,8 @@ class MacOSX_System : public System {
   // TODO: Define any necessary private members
  private:
   MacOSX_Processor macosx_cpu_;
-    std::set<int> actualPids_{};
-    std::set<int> newPids_{};
+  std::set<int> actualPids_{};
+  std::set<int> newPids_{};
 
   // Comp Sort Function
   static bool wayToSort(shared_ptr<Process> p1, shared_ptr<Process> p2);

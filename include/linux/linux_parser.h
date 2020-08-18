@@ -41,6 +41,7 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
+
 std::vector<std::string> CpuUtilization();
 long Jiffies();
 long ActiveJiffies();
@@ -55,6 +56,7 @@ enum CPUTimesIndex {
   kCstimeIdx = 17,
   kStarttimeIdx = 22
 };
+
 std::string Command(int pid);
 std::string Ram(int pid);
 std::string Uid(int pid);

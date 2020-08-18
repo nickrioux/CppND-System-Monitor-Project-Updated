@@ -20,7 +20,7 @@ Linux_Process::Linux_Process(const int& pid)
 }
 
 // TODO: Return this process's memory utilization
-string Linux_Process::Ram() { return (LinuxParser::Ram(Pid())); }
+string Linux_Process::Ram() const { return (LinuxParser::Ram(Pid())); }
 
 // TODO: Return the age of this process (in seconds)
-long int Linux_Process::UpTime() { return (LinuxParser::UpTime(Pid())); }
+long int Linux_Process::UpTime() const { return (LinuxParser::UpTime(Pid())); }

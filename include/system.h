@@ -20,12 +20,12 @@ class System {
   Processor& Cpu();  // TODO: See src/system.cpp
   virtual std::vector<shared_ptr<Process> >&
   Processes();                            // TODO: See src/system.cpp
-  virtual float MemoryUtilization();      // TODO: See src/system.cpp
-  virtual long UpTime();                  // TODO: See src/system.cpp
-  virtual int TotalProcesses();           // TODO: See src/system.cpp
-  virtual int RunningProcesses();         // TODO: See src/system.cpp
-  virtual std::string Kernel();           // TODO: See src/system.cpp
-  virtual std::string OperatingSystem();  // TODO: See src/system.cpp
+  virtual float MemoryUtilization() = 0;      // TODO: See src/system.cpp
+  virtual long UpTime() = 0;                  // TODO: See src/system.cpp
+  virtual int TotalProcesses() = 0;           // TODO: See src/system.cpp
+  virtual int RunningProcesses() = 0;         // TODO: See src/system.cpp
+  virtual std::string Kernel() = 0;           // TODO: See src/system.cpp
+  virtual std::string OperatingSystem() = 0;  // TODO: See src/system.cpp
 
   vector<shared_ptr<Process> >& GetProcesses() { return processes_; }
   void SetProcesses(vector<shared_ptr<Process> >& vProcesses) {
