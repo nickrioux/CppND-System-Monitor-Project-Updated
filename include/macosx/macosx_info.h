@@ -94,13 +94,12 @@ class MacOSXInfo {
   };
 
   // CPU Info
-  int cpu_count_{0};
-  std::vector<long> cpu_stats_{};
+  int cpuCount_{0};
+  std::vector<long> cpuStats_{};
 
   // Process Info
   long iRunningProcess_{0};
   std::set<ProcessMacOSX> processSet_{};
-
 };
 
 #endif

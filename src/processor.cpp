@@ -1,6 +1,6 @@
 #include "processor.h"
 
-// TODO: Return the aggregate CPU utilization
+// Return the aggregate CPU utilization
 float Processor::computeCpuUtilization(long currActiveJiffies,
                                        long currIdleJiffies) {
   long activeJiffies = currActiveJiffies - getPrevActiveJiffies();

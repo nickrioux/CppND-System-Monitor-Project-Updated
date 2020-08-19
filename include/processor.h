@@ -3,9 +3,8 @@
 
 class Processor {
  public:
-  virtual float Utilization() = 0;  // TODO: See src/processor.cpp
+  virtual float Utilization() = 0;
 
-  // TODO: Declare any necessary private members
  protected:
   float computeCpuUtilization(long activeJiffies, long idleJiffies);
   long getPrevActiveJiffies() const { return prevActiveJiffies_; }

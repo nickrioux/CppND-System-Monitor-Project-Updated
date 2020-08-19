@@ -7,9 +7,9 @@
 #endif
 
 #if defined(LINUX)
-#include "linux_system.h"
+#include "linux/linux_system.h"
 #elif defined(MACOS)
-#include "macosx_system.h"
+#include "macosx/macosx_system.h"
 #endif
 
 #include "ncurses_display.h"

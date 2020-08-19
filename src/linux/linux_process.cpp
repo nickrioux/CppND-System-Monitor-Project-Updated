@@ -1,5 +1,3 @@
-#include "linux_process.h"
-
 #include <unistd.h>
 
 #include <cctype>
@@ -7,7 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "linux_parser.h"
+#include "linux/linux_parser.h"
+#include "linux/linux_process.h"
 
 using std::string;
 using std::to_string;
@@ -19,8 +18,8 @@ Linux_Process::Linux_Process(const int& pid)
   // Contructor
 }
 
-// TODO: Return this process's memory utilization
+// Return this process's memory utilization
 string Linux_Process::Ram() const { return (LinuxParser::Ram(Pid())); }
 
-// TODO: Return the age of this process (in seconds)
+// Return the age of this process (in seconds)
 long int Linux_Process::UpTime() const { return (LinuxParser::UpTime(Pid())); }

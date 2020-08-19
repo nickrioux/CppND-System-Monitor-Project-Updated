@@ -1,6 +1,4 @@
 
-#include "macosx_info.h"
-
 #include <dirent.h>
 #include <libproc.h>
 #include <mach/mach.h>
@@ -16,6 +14,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "macosx/macosx_info.h"
 
 using std::stof;
 using std::string;
@@ -72,8 +72,7 @@ void MacOSXInfo::UpdateProcesses() {
   iRunningProcess_ = 0;
 
   // CPU Information
-  vector<long> cpu_stats;
-  cpu_stats_ = CpuUtilization();
+  cpuStats_ = CpuUtilization();
 
   for (int i = 0; i < static_cast<int>(mycount); i++) {
     struct kinfo_proc *currentProcess = &mylist[i];
@@ -88,8 +87,7 @@ void MacOSXInfo::UpdateProcesses() {
       activeJiffies = (pti.pti_total_system + pti.pti_total_user);
     }
 
-    processSet_.insert(
-        ProcessMacOSX(*currentProcess, ram, activeJiffies));
+    processSet_.insert(ProcessMacOSX(*currentProcess, ram, activeJiffies));
   }
 
   delete[] mylist;
@@ -105,7 +103,7 @@ std::set<int> MacOSXInfo::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
+// Read and return the system memory utilization
 float MacOSXInfo::MemoryUtilization() {
   kern_return_t kr;
   vm_statistics64_data_t vmstat;
@@ -128,7 +126,7 @@ float MacOSXInfo::MemoryUtilization() {
   return (memoryUsage);
 }
 
-// TODO: Read and return the system uptime
+// Read and return the system uptime
 long MacOSXInfo::UpTime() {
   struct timeval bootTime, currTime;
   int mib[2] = {CTL_KERN, KERN_BOOTTIME};
@@ -145,9 +143,9 @@ long MacOSXInfo::UpTime() {
 
 // Return the number of jiffies for the system
 long MacOSXInfo::Jiffies() {
-  if (cpu_stats_.size() > 0) {
-    return (cpu_stats_[kNice_] + cpu_stats_[kSystem_] + cpu_stats_[kUser_] +
-            cpu_stats_[kIdle_]);
+  if (cpuStats_.size() > 0) {
+    return (cpuStats_[kNice_] + cpuStats_[kSystem_] + cpuStats_[kUser_] +
+            cpuStats_[kIdle_]);
   } else {
     return 0;
   }
@@ -158,16 +156,16 @@ long MacOSXInfo::ActiveJiffies(int pid) {
   auto p = processSet_.find(ProcessMacOSX(pid));
 
   if (p != processSet_.end()) {
-    return ((*p).GetActiveJiffies() * cpu_count_);
+    return ((*p).GetActiveJiffies() * cpuCount_);
   }
 
   return (0);
 }
 
-// TODO: Read and return the number of active jiffies for the system
+// Read and return the number of active jiffies for the system
 long MacOSXInfo::ActiveJiffies() {
-  if (cpu_stats_.size() > 0) {
-    return (cpu_stats_[kNice_] + cpu_stats_[kSystem_] + cpu_stats_[kUser_]);
+  if (cpuStats_.size() > 0) {
+    return (cpuStats_[kNice_] + cpuStats_[kSystem_] + cpuStats_[kUser_]);
   } else {
     return 0;
   }
@@ -175,14 +173,14 @@ long MacOSXInfo::ActiveJiffies() {
 
 // Read and return the number of idle jiffies for the system
 long MacOSXInfo::IdleJiffies() {
-  if (cpu_stats_.size() > 0) {
-    return (cpu_stats_[MacOSXInfo::kIdle_]);
+  if (cpuStats_.size() > 0) {
+    return (cpuStats_[MacOSXInfo::kIdle_]);
   } else {
     return (0);
   }
 }
 
-// TODO: Read and return CPU utilization
+// Read and return CPU utilization
 vector<long> MacOSXInfo::CpuUtilization() {
   vector<long> cpuJiffies;
 
@@ -191,23 +189,23 @@ vector<long> MacOSXInfo::CpuUtilization() {
   unsigned long ulNice;
   unsigned long ulIdle;
 
-  cpu_count_ = getCpuInfo(&ulSystem, &ulUser, &ulNice, &ulIdle);
+  cpuCount_ = getCpuInfo(&ulSystem, &ulUser, &ulNice, &ulIdle);
 
-  cpuJiffies.push_back(ulSystem);
-  cpuJiffies.push_back(ulUser);
-  cpuJiffies.push_back(ulNice);
-  cpuJiffies.push_back(ulIdle);
+  cpuJiffies.emplace_back(ulSystem);
+  cpuJiffies.emplace_back(ulUser);
+  cpuJiffies.emplace_back(ulNice);
+  cpuJiffies.emplace_back(ulIdle);
 
   return (cpuJiffies);
 }
 
-// TODO: Read and return the total number of processes
+// Read and return the total number of processes
 int MacOSXInfo::TotalProcesses() { return (processSet_.size()); }
 
-// TODO: Read and return the number of running processes
+// Read and return the number of running processes
 int MacOSXInfo::RunningProcesses() { return (iRunningProcess_); }
 
-// TODO: Read and return the command associated with a process
+// Read and return the command associated with a process
 string MacOSXInfo::Command(int pid) {
   auto p = processSet_.find(ProcessMacOSX(pid));
 
@@ -220,7 +218,7 @@ string MacOSXInfo::Command(int pid) {
   return ("");
 }
 
-// TODO: Read and return the memory used by a process
+// Read and return the memory used by a process
 string MacOSXInfo::Ram(int pid) {
   auto p = processSet_.find(ProcessMacOSX(pid));
 
@@ -231,7 +229,7 @@ string MacOSXInfo::Ram(int pid) {
   return "";
 }
 
-// TODO: Read and return the user ID associated with a process
+// Read and return the user ID associated with a process
 string MacOSXInfo::Uid(int pid) {
   string uid{""};
   auto p = processSet_.find(ProcessMacOSX(pid));
@@ -243,7 +241,7 @@ string MacOSXInfo::Uid(int pid) {
   return uid;
 }
 
-// TODO: Read and return the user associated with a process
+// Read and return the user associated with a process
 string MacOSXInfo::User(int pid) {
   string sUser{""};
 
@@ -260,7 +258,7 @@ string MacOSXInfo::User(int pid) {
   return sUser;
 }
 
-// TODO: Read and return the uptime of a process
+// Read and return the uptime of a process
 long MacOSXInfo::UpTime(int pid) {
   long value = 0;
 
@@ -274,7 +272,7 @@ long MacOSXInfo::UpTime(int pid) {
 }
 
 // Private Methods
-void MacOSXInfo::init() { cpu_stats_ = CpuUtilization(); }
+void MacOSXInfo::init() { cpuStats_ = CpuUtilization(); }
 
 int MacOSXInfo::getCpuInfo(unsigned long *pulSystem, unsigned long *pulUser,
                            unsigned long *pulNice, unsigned long *pulIdle) {

@@ -1,11 +1,11 @@
-#include "process.h"
-
 #include <unistd.h>
 
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "process.h"
 
 using std::string;
 using std::to_string;
@@ -21,10 +21,10 @@ void Process::SetActive(bool bFlag) { active_ = bFlag; }
 
 bool Process::Active() const { return active_; }
 
-// TODO: Return this process's ID
+// Return this process's ID
 int Process::Pid() const { return (pid_); }
 
-// TODO: Return this process's CPU utilization
+// Return this process's CPU utilization
 float Process::CpuUtilization() const { return (cpuUsage_); }
 
 // Compute CPU Utilisation
@@ -32,36 +32,27 @@ void Process::ComputeCpuUtilization(long activeJiffies, long systemJiffies) {
   long totalTime = systemJiffies;
   long processTime = activeJiffies;
 
-  cpuUsage_ =
-      (processTime - getPrevProcessTime()) / (double)(totalTime - getPrevTotalTime());
+  cpuUsage_ = (processTime - getPrevProcessTime()) /
+              (double)(totalTime - getPrevTotalTime());
 
   setPrevTotalTime(totalTime);
   setPrevProcessTime(processTime);
 }
 
-// TODO: Return the command that generated this process
+// Return the command that generated this process
 string Process::Command() const { return command_; }
 
-// TODO: Return the user (name) that generated this process
+// Return the user (name) that generated this process
 string Process::User() const { return user_; }
 
 std::string Process::Ram() const { return ""; }
 long Process::UpTime() const { return 0; }
 
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
+// Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const a) const {
-  if (CpuUtilization() < a.CpuUtilization()) {
-    return true;
-  } else {
-    return false;
-  }
+  return (CpuUtilization() < a.CpuUtilization());
 }
 
 bool Process::operator>(Process const a) const {
-  if (CpuUtilization() > a.CpuUtilization()) {
-    return true;
-  } else {
-    return false;
-  }
+  return (CpuUtilization() > a.CpuUtilization());
 }

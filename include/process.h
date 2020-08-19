@@ -15,20 +15,19 @@ class Process {
  public:
   Process(const int& pid, string user, string command);
   virtual ~Process(){};
-  virtual int Pid() const;               // TODO: See src/process.cpp
-  virtual std::string User() const;            // TODO: See src/process.cpp
-  virtual std::string Command() const;         // TODO: See src/process.cpp
-  virtual float CpuUtilization() const;  // TODO: See src/process.cpp
+  virtual int Pid() const;
+  virtual std::string User() const;
+  virtual std::string Command() const;
+  virtual float CpuUtilization() const;
   virtual void ComputeCpuUtilization(long, long);
-  virtual std::string Ram() const;  //Specific for each version
-  virtual long int UpTime() const;  //Specific for each version
+  virtual std::string Ram() const;  // Specific for each version
+  virtual long int UpTime() const;  // Specific for each version
   void SetActive(bool);
   bool Active() const;
   void SetCpuUsage(float cpuUsage) { cpuUsage_ = cpuUsage; }
-  bool operator<(Process const a) const;  // TODO: See src/process.cpp
-  bool operator>(Process const a) const;  // TODO: See src/process.cpp
+  bool operator<(Process const a) const;
+  bool operator>(Process const a) const;
 
-  // TODO: Declare any necessary private members
  private:
   void setPrevTotalTime(long time) { prev_TotalTime_ = time; }
   long getPrevTotalTime() const { return (prev_TotalTime_); }

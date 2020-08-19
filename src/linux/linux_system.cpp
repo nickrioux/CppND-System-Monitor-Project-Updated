@@ -1,5 +1,3 @@
-#include "linux_system.h"
-
 #include <unistd.h>
 
 #include <cstddef>
@@ -8,12 +6,14 @@
 #include <string>
 #include <vector>
 
-#include "linux_parser.h"
-#include "linux_process.h"
-#include "linux_processor.h"
 #include "process.h"
 #include "processor.h"
 #include "system.h"
+#include "linux/linux_processor.h"
+#include "linux/linux_parser.h"
+#include "linux/linux_process.h"
+#include "linux/linux_system.h"
+
 
 using std::set;
 using std::size_t;
@@ -22,12 +22,7 @@ using std::vector;
 
 Linux_System::Linux_System() : System(linux_cpu_){};
 
-// Sort Process Comparison Function
-bool Linux_System::wayToSort(shared_ptr<Process> p1, shared_ptr<Process> p2) {
-  return *p1 > *p2;
-}
-
-// TODO: Return a container composed of the system's processes
+// Return a container composed of the system's processes
 vector<shared_ptr<Process> >& Linux_System::Processes() {
   // Update Processes
   std::set<int> pids{};
@@ -44,7 +39,7 @@ vector<shared_ptr<Process> >& Linux_System::Processes() {
   newPids_.clear();
   for (int pid : pids) {
     if (currPids.find(pid) == currPids.end()) {
-      GetProcesses().push_back(make_shared<Linux_Process>(pid));
+      GetProcesses().emplace_back(make_shared<Linux_Process>(pid));
     }
     newPids_.insert(pid);
   }
@@ -68,29 +63,31 @@ vector<shared_ptr<Process> >& Linux_System::Processes() {
 
   // Sort Process
   std::sort(GetProcesses().begin(), GetProcesses().end(),
-            Linux_System::wayToSort);
+            [](const shared_ptr<Process> p1, const shared_ptr<Process> p2) {
+              return *p1 > *p2;
+            });
 
   return GetProcesses();
 }
 
-// TODO: Return the system's kernel identifier (string)
+// Return the system's kernel identifier (string)
 std::string Linux_System::Kernel() { return LinuxParser::Kernel(); }
 
-// TODO: Return the system's memory utilization
+// Return the system's memory utilization
 float Linux_System::MemoryUtilization() {
   return LinuxParser::MemoryUtilization();
 }
 
-// TODO: Return the operating system name
+// Return the operating system name
 std::string Linux_System::OperatingSystem() {
   return LinuxParser::OperatingSystem();
 }
 
-// TODO: Return the number of processes actively running on the system
+// Return the number of processes actively running on the system
 int Linux_System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
 
-// TODO: Return the total number of processes on the system
+// Return the total number of processes on the system
 int Linux_System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
 
-// TODO: Return the number of seconds since the system started running
+// Return the number of seconds since the system started running
 long int Linux_System::UpTime() { return LinuxParser::UpTime(); }
