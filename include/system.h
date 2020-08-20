@@ -1,27 +1,44 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+#include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
 #include "process.h"
 #include "processor.h"
 
+using std::make_shared;
+using std::set;
+using std::shared_ptr;
+using std::vector;
+
 class System {
  public:
-  Processor& Cpu();                   // TODO: See src/system.cpp
-  std::vector<Process>& Processes();  // TODO: See src/system.cpp
-  float MemoryUtilization();          // TODO: See src/system.cpp
-  long UpTime();                      // TODO: See src/system.cpp
-  int TotalProcesses();               // TODO: See src/system.cpp
-  int RunningProcesses();             // TODO: See src/system.cpp
-  std::string Kernel();               // TODO: See src/system.cpp
-  std::string OperatingSystem();      // TODO: See src/system.cpp
+  System(Processor&);
+  Processor& Cpu();
+  virtual std::vector<shared_ptr<Process> >& Processes();
+  virtual float MemoryUtilization() = 0;
+  virtual long UpTime() = 0;
+  virtual int TotalProcesses() = 0;
+  virtual int RunningProcesses() = 0;
+  virtual std::string Kernel() = 0;
+  virtual std::string OperatingSystem() = 0;
 
-  // TODO: Define any necessary private members
+  vector<shared_ptr<Process> >& GetProcesses() { return processes_; }
+  void SetProcesses(vector<shared_ptr<Process> >& vProcesses) {
+    processes_ = vProcesses;
+  }
+
+  Processor& GetCpu() { return (cpu_); }
+
  private:
-  Processor cpu_ = {};
-  std::vector<Process> processes_ = {};
+  std::set<int> actualPids_;
+  std::set<int> newPids_;
+
+  Processor& cpu_;
+  vector<shared_ptr<Process> > processes_;
 };
 
 #endif

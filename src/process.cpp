@@ -1,4 +1,5 @@
 #include <unistd.h>
+
 #include <cctype>
 #include <sstream>
 #include <string>
@@ -10,24 +11,48 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-// TODO: Return this process's ID
-int Process::Pid() { return 0; }
+// Process Constructor
+Process::Process(const int& pid, string user, string command)
+    : pid_(pid), user_(user), command_(command), cpuUsage_(0.0) {
+  // Contructor
+}
 
-// TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { return 0; }
+void Process::SetActive(bool bFlag) { active_ = bFlag; }
 
-// TODO: Return the command that generated this process
-string Process::Command() { return string(); }
+bool Process::Active() const { return active_; }
 
-// TODO: Return this process's memory utilization
-string Process::Ram() { return string(); }
+// Return this process's ID
+int Process::Pid() const { return (pid_); }
 
-// TODO: Return the user (name) that generated this process
-string Process::User() { return string(); }
+// Return this process's CPU utilization
+float Process::CpuUtilization() const { return (cpuUsage_); }
 
-// TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return 0; }
+// Compute CPU Utilisation
+void Process::ComputeCpuUtilization(long activeJiffies, long systemJiffies) {
+  long totalTime = systemJiffies;
+  long processTime = activeJiffies;
 
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
+  cpuUsage_ = (processTime - getPrevProcessTime()) /
+              (double)(totalTime - getPrevTotalTime());
+
+  setPrevTotalTime(totalTime);
+  setPrevProcessTime(processTime);
+}
+
+// Return the command that generated this process
+string Process::Command() const { return command_; }
+
+// Return the user (name) that generated this process
+string Process::User() const { return user_; }
+
+std::string Process::Ram() const { return ""; }
+long Process::UpTime() const { return 0; }
+
+// Overload the "less than" comparison operator for Process objects
+bool Process::operator<(Process const a) const {
+  return (CpuUtilization() < a.CpuUtilization());
+}
+
+bool Process::operator>(Process const a) const {
+  return (CpuUtilization() > a.CpuUtilization());
+}
